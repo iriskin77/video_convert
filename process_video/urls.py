@@ -20,10 +20,8 @@ from . import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    # path('upload_video/', views.upload_video),
-    # path('status/', views.get_status_processing),
     path('change_resolution/<uuid:pk>/', views.patch_resolution, name="change_resolution"),
     path('list_files/', views.ListApiFiles.as_view()),
     path('file/', views.FileApi.as_view()),
-    #path('file/<uuid:pk>/', views.FileApi.as_view())
+    path('file/<uuid:pk>/', views.FileApi.as_view())
 ]
