@@ -5,11 +5,15 @@ services:
     build: .
     container_name: 'test_video'
     command: ['./start.sh']
-#    volumes:
-#      - ./db.sqlite3:/test_video/db.sqlite3
+    volumes:
+      #- ./db.sqlite3:/test_video/db.sqlite3
+      - logging:/test_video/log.json
     ports:
       - "8044:8044"
-
+    depends_on:
+      - db
+    networks:
+      - custom
 
   db:
       image: postgres
@@ -21,6 +25,13 @@ services:
         - .env
       ports:
         - "5234:5432"
+      networks:
+        - custom
+
+networks:
+  custom:
+    driver: bridge
 
 volumes:
   postgres_data:
+  logging:
