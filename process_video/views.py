@@ -1,7 +1,5 @@
 import threading
-import logging
 from rest_framework.response import Response
-from rest_framework import status
 from rest_framework.generics import ListAPIView
 from rest_framework.parsers import MultiPartParser, JSONParser
 from rest_framework.views import APIView
@@ -23,13 +21,17 @@ class FileApi(APIView):
 
     def get(self, request, pk):
 
-        video = VideoFile.objects.get(pk=pk)
-        serialized_data = VideoFileSerializer(video)
+        try:
+            video = VideoFile.objects.get(pk=pk)
+            serialized_data = VideoFileSerializer(video)
 
-        return Response({'id': serialized_data.data['id'],
+            return Response({'id': serialized_data.data['id'],
                          'filename': serialized_data.data['filename'],
                          'is_processing': serialized_data.data['is_processing'],
                          'processing_success': serialized_data.data['processing_success']})
+
+        except Exception as ex:
+            return Response({'error': str(ex)})
 
     def post(self, request):
 
@@ -39,29 +41,34 @@ class FileApi(APIView):
             serialized_data.save()
             return Response({"id": serialized_data.data['id']})
 
-        return Response({"Result": status.HTTP_500_INTERNAL_SERVER_ERROR, "Error": serialized_data.errors})
+        return Response({"error": serialized_data.errors})
 
     def patch(self, request, pk):
 
-        video_file = VideoFile.objects.get(pk=pk)
-        serializer = VideoFileSerializer(instance=video_file, data=request.data, partial=True)
+        try:
+            video_file = VideoFile.objects.get(pk=pk)
+            serializer = VideoFileSerializer(instance=video_file, data=request.data, partial=True)
 
-        if serializer.is_valid():
-            path = video_file.file.path
-            width: int = serializer.validated_data['width']
-            height: int = serializer.validated_data['height']
-            thread = threading.Thread(target=change_video_resolution, args=[path, width, height, pk])
-            thread.start()
-            serializer.save()
-            return Response({'success': 200})
+            if serializer.is_valid():
+                path = video_file.file.path
+                width: int = serializer.validated_data['width']
+                height: int = serializer.validated_data['height']
+                thread = threading.Thread(target=change_video_resolution, args=[path, width, height, pk])
+                thread.start()
+                serializer.save()
+                return Response({'success': 200})
 
-        return Response({'error': serializer.errors})
+            return Response({'error': serializer.errors})
 
-    def delete(self, request, pk=None):
+        except Exception as ex:
+            return Response({'error': str(ex)})
 
-        if pk is not None:
+    def delete(self, request, pk):
+
+        try:
             video = VideoFile.objects.get(pk=pk)
             video.delete()
             return Response({'success': True})
 
-        return Response({'success': False})
+        except Exception as ex:
+            return Response({'error': str(ex)})
