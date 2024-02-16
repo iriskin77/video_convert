@@ -21,7 +21,7 @@ class FileApi(APIView):
 
     parser_classes = (MultiPartParser, JSONParser)
 
-    def get(self, request, pk=None):
+    def get(self, request, pk):
 
         video = VideoFile.objects.get(pk=pk)
         serialized_data = VideoFileSerializer(video)
@@ -48,9 +48,9 @@ class FileApi(APIView):
 
         if serializer.is_valid():
             path = video_file.file.path
-            weight: int = serializer.validated_data['weight']
+            width: int = serializer.validated_data['width']
             height: int = serializer.validated_data['height']
-            thread = threading.Thread(target=change_video_resolution, args=[path, weight, height, pk])
+            thread = threading.Thread(target=change_video_resolution, args=[path, width, height, pk])
             thread.start()
             serializer.save()
             return Response({'success': 200})

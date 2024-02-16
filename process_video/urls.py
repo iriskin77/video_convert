@@ -19,7 +19,6 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
     path('list_files/', views.ListApiFiles.as_view()),
     path('file/', views.FileApi.as_view()),
     path('file/<uuid:pk>/', views.FileApi.as_view())

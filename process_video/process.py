@@ -22,7 +22,7 @@ def get_width_height_video(file_path: str) -> tuple[int, int]:
         logger.warning(f"Fn get_width_height_video has finished incorrectly: {ex}")
 
 
-def change_video_resolution(file_path: str, update_weight: int, update_height: int, pk) -> None:
+def change_video_resolution(file_path: str, update_width: int, update_height: int, pk) -> None:
     try:
         logger.info("Fn change_video_resolution has started")
         path_original = str(file_path)
@@ -31,14 +31,14 @@ def change_video_resolution(file_path: str, update_weight: int, update_height: i
         path_to_copy_file = shutil.copy(path_original, dir_copy)
 
         stream = ffmpeg.input(str(path_to_copy_file))
-        stream = stream.filter('scale', w=update_weight, h=update_height)
+        stream = stream.filter('scale', w=update_width, h=update_height)
         stream = ffmpeg.output(stream, path_original)
         VideoFile.objects.filter(pk=pk).update(is_processing=True)
         ffmpeg.run(stream, overwrite_output=True)
         os.remove(path_to_copy_file)
         VideoFile.objects.filter(pk=pk).update(processing_success=True,
                                                is_processing=False,
-                                               weight=update_weight,
+                                               width=update_width,
                                                height=update_height)
         logger.info("Fn change_video_resolution has finished successfully")
     except Exception as ex:
