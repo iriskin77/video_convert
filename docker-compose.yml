@@ -1,0 +1,26 @@
+version: "3.9"
+
+services:
+  web:
+    build: .
+    container_name: 'test_video'
+    command: ['./start.sh']
+#    volumes:
+#      - ./db.sqlite3:/test_video/db.sqlite3
+    ports:
+      - "8044:8044"
+
+
+  db:
+      image: postgres
+      container_name: "db"
+      volumes:
+        - postgres_data:/var/lib/postgresql/data/
+      restart: always
+      env_file:
+        - .env
+      ports:
+        - "5234:5432"
+
+volumes:
+  postgres_data:
