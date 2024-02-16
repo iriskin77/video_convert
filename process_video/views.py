@@ -1,4 +1,5 @@
 import threading
+import logging
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.generics import ListAPIView
@@ -41,8 +42,10 @@ class FileApi(APIView):
         return Response({"Result": status.HTTP_500_INTERNAL_SERVER_ERROR, "Error": serialized_data.errors})
 
     def patch(self, request, pk):
+
         video_file = VideoFile.objects.get(pk=pk)
         serializer = VideoFileSerializer(instance=video_file, data=request.data, partial=True)
+
         if serializer.is_valid():
             path = video_file.file.path
             weight: int = serializer.validated_data['weight']

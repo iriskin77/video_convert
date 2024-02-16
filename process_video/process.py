@@ -1,24 +1,30 @@
 import os
+import logging
 import ffmpeg
 import shutil
 from .models import VideoFile
 
 
+logger = logging.getLogger('main')
+
+
 def get_width_height_video(file_path: str) -> tuple[int, int]:
     try:
+        logger.info(f"Fn get_width_height_video has started")
         probe = ffmpeg.probe(file_path)
         video_stream = next((stream for stream in probe['streams'] if stream['codec_type'] == 'video'), None)
         width = int(video_stream['width'])
         height = int(video_stream['height'])
+        logger.info(f"Fn get_width_height_video has finished successfully")
         return width, height
 
     except Exception as ex:
-        print(f'Error {ex}')
+        logger.warning(f"Fn get_width_height_video has finished incorrectly: {ex}")
 
 
 def change_video_resolution(file_path: str, update_weight: int, update_height: int, pk) -> None:
     try:
-
+        logger.info("Fn change_video_resolution has started")
         path_original = str(file_path)
         dir_copy = os.path.join(os.path.dirname(os.path.dirname(__file__)), f"media/video_copy/")
 
@@ -34,7 +40,8 @@ def change_video_resolution(file_path: str, update_weight: int, update_height: i
                                                is_processing=False,
                                                weight=update_weight,
                                                height=update_height)
+        logger.info("Fn change_video_resolution has finished successfully")
     except Exception as ex:
         VideoFile.objects.filter(pk=pk).update(processing_success=False, is_processing=False)
-        print(f'Error {ex}')
+        logger.warning(f"Fn change_video_resolution has finished incorrectly: {ex}")
 

@@ -14,6 +14,7 @@ class VideoFileSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         new_video = VideoFile.objects.create(**validated_data)
         new_video.save()
+        print(new_video.file.path)
         weight, height = get_width_height_video(file_path=new_video.file.path)
         new_video.weight = weight
         new_video.height = height

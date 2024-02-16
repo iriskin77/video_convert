@@ -15,7 +15,7 @@ from dotenv import load_dotenv
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-load_dotenv()
+load_dotenv(os.path.join(BASE_DIR, ".env"))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
@@ -137,3 +137,28 @@ MEDIA_ROOT = BASE_DIR / 'media'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'json': {
+            '()': 'json_log_formatter.JSONFormatter'
+        }
+    },
+    'handlers': {
+        'json_file': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': './logs/log.json',
+            'formatter': 'json',
+        }
+    },
+    'loggers': {
+        'json_logger': {
+            'handlers': ['json_file'],
+            'level': 'INFO',
+        }
+    }
+}
