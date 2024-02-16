@@ -1,14 +1,12 @@
 import os
-from .models import VideoFile
 import ffmpeg
 import shutil
+from .models import VideoFile
 
 
 def get_width_height_video(file_path: str) -> tuple[int, int]:
     try:
-        path_to_file = os.path.join(os.path.dirname(os.path.dirname(__file__)), f"media/video_files/{str(file_path)}")
-        print(path_to_file)
-        probe = ffmpeg.probe(path_to_file)
+        probe = ffmpeg.probe(file_path)
         video_stream = next((stream for stream in probe['streams'] if stream['codec_type'] == 'video'), None)
         width = int(video_stream['width'])
         height = int(video_stream['height'])

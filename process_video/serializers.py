@@ -1,7 +1,8 @@
 from rest_framework import serializers
 from .models import VideoFile
-from .process import get_width_height_video
+from .process import get_width_height_video, change_video_resolution
 import os
+import threading
 
 
 class VideoFileSerializer(serializers.ModelSerializer):
@@ -11,10 +12,10 @@ class VideoFileSerializer(serializers.ModelSerializer):
         fields = ('id', 'filename', 'file', 'weight', 'height', 'is_processing', 'processing_success')
 
     def create(self, validated_data):
-        weight, height = get_width_height_video(file_path=validated_data['file'])
-        validated_data['weight'] = weight
-        validated_data['height'] = height
-        return VideoFile.objects.create(**validated_data)
-
-
-
+        new_video = VideoFile.objects.create(**validated_data)
+        new_video.save()
+        weight, height = get_width_height_video(file_path=new_video.file.path)
+        new_video.weight = weight
+        new_video.height = height
+        new_video.save()
+        return new_video
