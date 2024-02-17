@@ -6,4 +6,3 @@ do
     sleep 10
 done
 python manage.py runserver 0.0.0.0:8044
-#gunicorn --bind 0.0.0.0:8080 parser.wsgi

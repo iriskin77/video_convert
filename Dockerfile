@@ -5,10 +5,9 @@ RUN apt-get -y update && apt-get -y upgrade && apt-get install -y --no-install-r
 
 
 COPY ./requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt && pip install gunicorn
+RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
 RUN chmod a+x /test_video/start.sh
 
-#ENTRYPOINT ["./start.sh"]

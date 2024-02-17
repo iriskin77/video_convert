@@ -8,10 +8,10 @@
 
 Основные выполненные задачи:
 
-- [x] POST /file/
-- [x] PATCH /file/{id}/
-- [x] GET /file/{id}/
-- [x] DELETE /file/{id}/
+- [x] POST /file/  http://127.0.0.1:8044/api/v1/file/
+- [x] PATCH /file/{id}/ http://127.0.0.1:8044/api/v1/file/{uuid}/
+- [x] GET /file/{id}/ http://127.0.0.1:8044/api/v1/file/{uuid}/
+- [x] DELETE /file/{id}/ http://127.0.0.1:8044/api/v1/file/{uuid}/
 - [x] Обработка ошибок
 
 Дополнительные выполненные задачи:
@@ -123,6 +123,6 @@
 + Активировать виртуальное окружение: source venv/bin/actibate
 + Установить зависимости: pip install -r requirements.txt
 + Запустить приложение: uvicorn main:app --reload
-+ После этого приложение будет доступно на порте http://127.0.0.1:8090/
++ После этого приложение будет доступно на порте http://127.0.0.1:8044/
 
 
