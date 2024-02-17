@@ -20,7 +20,7 @@ class FileApi(APIView):
     parser_classes = (MultiPartParser, JSONParser)
 
     def get(self, request, pk):
-
+        """""Получить файл по его uuid"""""
         try:
             video = VideoFile.objects.get(pk=pk)
             serialized_data = VideoFileSerializer(video)
@@ -34,7 +34,7 @@ class FileApi(APIView):
             return Response({'error': str(ex)})
 
     def post(self, request):
-
+        """""Загрузить файл"""""
         serialized_data = VideoFileSerializer(data=request.data)
 
         if serialized_data.is_valid():
@@ -44,7 +44,7 @@ class FileApi(APIView):
         return Response({"error": serialized_data.errors})
 
     def patch(self, request, pk):
-
+        """""Изменить разрешение файла"""""
         try:
             video_file = VideoFile.objects.get(pk=pk)
             serializer = VideoFileSerializer(instance=video_file, data=request.data, partial=True)
@@ -64,7 +64,7 @@ class FileApi(APIView):
             return Response({'error': str(ex)})
 
     def delete(self, request, pk):
-
+        """""Удалить файл по его uuid"""""
         try:
             video = VideoFile.objects.get(pk=pk)
             video.delete()

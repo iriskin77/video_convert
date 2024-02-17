@@ -9,6 +9,7 @@ logger = logging.getLogger('main')
 
 
 def get_width_height_video(file_path: str) -> tuple[int, int]:
+    """""Принимает файл с видео, определяет его разрешение (width, height)"""""
     try:
         logger.info(f"Fn get_width_height_video has started")
         probe = ffmpeg.probe(file_path)
@@ -23,6 +24,8 @@ def get_width_height_video(file_path: str) -> tuple[int, int]:
 
 
 def change_video_resolution(file_path: str, update_width: int, update_height: int, pk) -> None:
+    """""Принимает файл с видео, делает его копию, меняет разрешение скопированного файла, 
+         записывает измененный файл и новое разрешение файла (width, height) в БД"""""
     try:
         logger.info("Fn change_video_resolution has started")
         path_original = str(file_path)
