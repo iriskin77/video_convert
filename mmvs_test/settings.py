@@ -146,19 +146,29 @@ LOGGING = {
     'formatters': {
         'json': {
             '()': 'json_log_formatter.JSONFormatter'
-        }
+        },
+        'main_formatter': {
+            'format': "{asctime} - {levelname} - {module} - {message}",
+            "style": "{",
+        },
     },
     'handlers': {
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'main_formatter',
+        },
         'json_file': {
             'level': 'INFO',
             'class': 'logging.FileHandler',
             'filename': './logs/log.json',
             'formatter': 'json',
-        }
+        },
     },
     'loggers': {
-        'json_logger': {
-            'handlers': ['json_file'],
+        'main': {
+            'handlers': ['json_file', 'console'],
+            'propagate': True,
             'level': 'INFO',
         }
     }

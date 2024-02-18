@@ -5,7 +5,7 @@ import shutil
 from .models import VideoFile
 
 
-logger = logging.getLogger('json_logger')
+logger = logging.getLogger('main')
 
 
 def get_width_height_video(file_path: str) -> tuple[int, int]:
